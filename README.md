@@ -1,5 +1,15 @@
 # SafeGuard IMS — Insurance Management System
 
+## 🌐 Live Website
+
+**Access SafeGuard IMS here:** https://safeguard-insurance-management-system.onrender.com/
+
+The application is deployed online for demonstration and academic evaluation.
+
+## 🔐 Demo Login
+
+Admin demonstration credentials username: admin, password: Admin@123
+
 *Secure. Manage. Protect.*
 
 A full-stack web application for a college PAT 4 practical: **Flask + SQLite + HTML/CSS/vanilla JavaScript**.
