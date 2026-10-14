@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Claims</h1><p class="muted">Submit, review and decide insurance claims.</p></div>
+  <button class="btn btn-primary" id="addBtn" type="button">+ Submit Claim</button>
+</div>
+<div class="summary-strip" id="summary"></div>
+<article class="card">
+  <div class="toolbar">
+    <input type="number" id="claimId" class="input" placeholder="Claim ID" min="1" aria-label="Search by claim ID">
+    <input type="number" id="policyId" class="input" placeholder="Policy ID" min="1" aria-label="Search by policy ID">
+    <select id="statusFilter" class="input" aria-label="Filter by status"><option value="">All statuses</option><option>Pending</option><option>Approved</option><option>Rejected</option></select>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Claim ID</th><th>Policy ID</th><th>Customer</th><th>Claim Date</th><th class="num">Amount</th><th>Status</th><th>Decision Date</th><th class="actions">Actions</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="pager" id="pager"></div>
+</article>
+
+<div class="modal-backdrop" id="formModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+    <form id="claimForm" novalidate>
+      <div class="modal-head"><h3 id="formTitle">Submit Claim</h3><button type="button" class="icon-btn" data-close aria-label="Close">&times;</button></div>
+      <div class="modal-body form-grid">
+        <div class="field span-2"><label for="policy_id">Policy <span class="opt">(active policies only)</span></label><select id="policy_id" name="policy_id" required></select></div>
+        <div class="field"><label for="claim_date">Claim date</label><input id="claim_date" name="claim_date" type="date" required></div>
+        <div class="field"><label for="claim_amount">Claim amount (₹)</label><input id="claim_amount" name="claim_amount" type="number" min="1" step="any" required></div>
+        <div class="field span-2"><label for="claim_reason">Reason for claim</label><textarea id="claim_reason" name="claim_reason" rows="3" maxlength="500" required></textarea></div>
+        <p class="muted small span-2">Educational rules: the policy must be Active, the claim date must fall inside the policy period and not be in the future, and the amount cannot exceed the policy coverage. Real insurers apply additional underwriting and assessment rules.</p>
+      </div>
+      <div class="modal-foot"><button type="button" class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" type="submit" id="saveBtn">Submit claim</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="detailModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="modal-head"><h3 id="detailTitle">Claim details</h3><button type="button" class="icon-btn" data-close aria-label="Close">&times;</button></div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-foot" id="detailFoot"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/claims.js') }}"></script>{% endblock %}

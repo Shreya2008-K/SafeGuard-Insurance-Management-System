@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card empty-state" style="margin-top:40px">
+  <h1>{{ code }}</h1>
+  <p class="muted">{{ message }}</p>
+  <a class="btn btn-primary" href="{{ url_for('dashboard_page') }}">Back to dashboard</a>
+</div>
+{% endblock %}

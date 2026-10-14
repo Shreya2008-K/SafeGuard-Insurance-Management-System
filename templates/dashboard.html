@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+{% from '_icons.html' import icon %}
+<div class="page-head">
+  <div>
+    <h1>Welcome back, {{ display_name }}</h1>
+    <p class="muted">Here's what's happening with your insurance portfolio today.</p>
+  </div>
+  {% if can_write %}<a class="btn btn-primary" href="{{ url_for('policies_page', new=1) }}">+ Create New Policy</a>{% endif %}
+</div>
+
+<section class="stat-grid">
+  <article class="card stat"><div><span class="stat-label">Total Customers</span><strong class="stat-value" id="statCustomers">–</strong><span class="stat-note" id="statCustomersNote">&nbsp;</span></div><span class="stat-icon tint-teal">{{ icon('users', 22) }}</span></article>
+  <article class="card stat"><div><span class="stat-label">Active Policies</span><strong class="stat-value" id="statPolicies">–</strong><span class="stat-note">Policies currently active</span></div><span class="stat-icon tint-blue">{{ icon('policy', 22) }}</span></article>
+  <article class="card stat"><div><span class="stat-label">Pending Claims</span><strong class="stat-value" id="statClaims">–</strong><span class="stat-note">Requires attention</span></div><span class="stat-icon tint-amber">{{ icon('shield', 22) }}</span></article>
+  <article class="card stat"><div><span class="stat-label">Total Agents</span><strong class="stat-value" id="statAgents">–</strong><span class="stat-note">Registered insurance agents</span></div><span class="stat-icon tint-purple">{{ icon('agent', 22) }}</span></article>
+</section>
+
+<section class="grid-2">
+  <article class="card">
+    <div class="card-head"><div><h2>Policy Distribution</h2><p class="muted">Portfolio by insurance category</p></div></div>
+    <div class="donut-layout">
+      <div class="donut-box"><canvas id="donutChart" aria-label="Policy distribution donut chart" role="img"></canvas></div>
+      <ul class="legend" id="donutLegend"></ul>
+    </div>
+  </article>
+  <article class="card">
+    <div class="card-head"><div><h2>Claims Overview</h2><p class="muted">Monthly claims processing summary</p></div></div>
+    <div class="bar-box"><canvas id="barChart" aria-label="Monthly claims bar chart" role="img"></canvas></div>
+  </article>
+</section>
+
+<section class="grid-main">
+  <article class="card">
+    <div class="card-head"><div><h2>Recent Policies</h2><p class="muted">Latest policies added to your portfolio</p></div>
+      <a class="link" href="{{ url_for('policies_page') }}">View all policies</a></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Policy ID</th><th>Customer Name</th><th>Policy Type</th><th class="num">Premium</th><th>Start Date</th><th>Status</th></tr></thead>
+        <tbody id="recentPolicies"><tr><td colspan="6" class="loading">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </article>
+  <article class="card">
+    <div class="card-head"><div><h2>Recent Claims</h2><p class="muted">Latest submissions</p></div></div>
+    <ul class="claim-list" id="recentClaims"><li class="loading">Loading…</li></ul>
+    <div class="card-foot"><a class="link" href="{{ url_for('claims_page') }}">View all claims</a></div>
+  </article>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/vendor/chart.umd.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

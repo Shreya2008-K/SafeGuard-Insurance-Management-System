@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><h1>Settings</h1><p class="muted">System information. Administrators only. Personal details and password are on your <a class="link" href="{{ url_for('profile_page') }}">Profile</a>.</p></div></div>
+<section class="grid-2">
+  <article class="card">
+    <div class="card-head"><div><h2>Database</h2><p class="muted">SQLite record counts</p></div></div>
+    <dl class="kv" id="dbInfo"><dt>File</dt><dd>–</dd></dl>
+  </article>
+  <article class="card">
+    <div class="card-head"><div><h2>System</h2><p class="muted">Environment and business rules</p></div></div>
+    <dl class="kv" id="sysInfo"><dt>Environment</dt><dd>–</dd></dl>
+    <p class="muted small">Policy statuses, claim validation and the premium calculator are educational business rules implemented in Python and SQLite for a college project. They do not represent how a real insurance company underwrites, prices or settles claims.</p>
+    <p style="margin-top:16px"><a class="btn btn-outline" href="{{ url_for('users_page') }}">Open User Management</a></p>
+  </article>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/settings.js') }}"></script>{% endblock %}

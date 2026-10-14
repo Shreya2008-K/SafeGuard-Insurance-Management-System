@@ -1,0 +1,4 @@
+Flask>=3.0,<4.0
+Werkzeug>=3.0,<4.0
+# Gunicorn is for Linux/macOS production hosts only (it does not run on Windows):
+gunicorn>=21.2; sys_platform != "win32"

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><h1>My Profile</h1><p class="muted">View and update your own account details and password.</p></div></div>
+<section class="grid-2">
+  <article class="card">
+    <div class="card-head"><div><h2>Personal information</h2><p class="muted">Your username and role are managed by an administrator.</p></div></div>
+    <dl class="kv" id="accountInfo"><dt>Username</dt><dd>–</dd></dl>
+    <form id="profileForm" novalidate>
+      <div class="field"><label for="display_name">Display name</label><input id="display_name" name="display_name" maxlength="60" autocomplete="name"></div>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" maxlength="120" autocomplete="email"></div>
+      <div class="field"><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+      <button class="btn btn-primary" type="submit" id="profileBtn">Save changes</button>
+    </form>
+  </article>
+  <article class="card">
+    <div class="card-head"><div><h2>Change password</h2><p class="muted">Enter your current password to set a new one.</p></div></div>
+    <form id="passwordForm" novalidate>
+      <div class="field"><label for="current_password">Current password</label><input id="current_password" name="current_password" type="password" autocomplete="current-password" required></div>
+      <div class="field"><label for="new_password">New password</label><input id="new_password" name="new_password" type="password" autocomplete="new-password" minlength="8" required>
+        <div class="hint">At least 8 characters with a letter and a number.</div></div>
+      <div class="field"><label for="confirm_password">Confirm new password</label><input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required></div>
+      <button class="btn btn-primary" type="submit" id="passwordBtn">Update password</button>
+    </form>
+    <h3 class="sub" id="support">Support</h3>
+    <p class="muted">Need help? Contact the support team at <strong>support@safeguard-ims.example</strong>. To change your role, ask an administrator.</p>
+  </article>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/profile.js') }}"></script>{% endblock %}

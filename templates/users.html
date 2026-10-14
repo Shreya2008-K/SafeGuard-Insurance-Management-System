@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head">
+  <div><h1>User Management</h1><p class="muted">Create accounts, assign roles and control who can sign in. Administrators only.</p></div>
+  <button class="btn btn-primary" id="addBtn" type="button">+ Create User</button>
+</div>
+<article class="card">
+  <div class="role-legend muted small"><strong>Admin</strong> full access · <strong>Manager</strong> manages customers, agents, policies, claims and reports · <strong>Staff</strong> read-only</div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>ID</th><th>Username</th><th>Display name</th><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th class="actions">Actions</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+</article>
+
+<div class="modal-backdrop" id="formModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+    <form id="userForm" novalidate>
+      <div class="modal-head"><h3 id="formTitle">Create User</h3><button type="button" class="icon-btn" data-close aria-label="Close">&times;</button></div>
+      <div class="modal-body form-grid">
+        <div class="field"><label for="username">Username</label><input id="username" name="username" maxlength="30" autocomplete="off" required></div>
+        <div class="field"><label for="role">Role</label>
+          <select id="role" name="role" required><option value="admin">Admin</option><option value="manager">Manager</option><option value="staff" selected>Staff</option></select></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="field"><label for="confirm_password">Confirm password</label><input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required></div>
+        <div class="field"><label for="display_name">Display name <span class="opt">(optional)</span></label><input id="display_name" name="display_name" maxlength="60"></div>
+        <div class="field"><label for="email">Email <span class="opt">(optional)</span></label><input id="email" name="email" type="email" maxlength="120"></div>
+      </div>
+      <div class="modal-foot"><button type="button" class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" type="submit" id="saveBtn">Create user</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="roleModal" hidden>
+  <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="roleTitle">
+    <form id="roleForm" novalidate>
+      <div class="modal-body"><h3 id="roleTitle">Change role</h3>
+        <div class="field" style="margin-top:14px"><label for="newRole">Role</label>
+          <select id="newRole" name="role"><option value="admin">Admin</option><option value="manager">Manager</option><option value="staff">Staff</option></select></div></div>
+      <div class="modal-foot"><button type="button" class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" type="submit">Save role</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="pwModal" hidden>
+  <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <form id="pwForm" novalidate>
+      <div class="modal-body"><h3 id="pwTitle">Reset password</h3>
+        <div class="field" style="margin-top:14px"><label for="new_password">New password</label><input id="new_password" name="new_password" type="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="field"><label for="confirm_password2">Confirm new password</label><input id="confirm_password2" name="confirm_password" type="password" autocomplete="new-password" required></div></div>
+      <div class="modal-foot"><button type="button" class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" type="submit">Reset password</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/users.js') }}"></script>{% endblock %}

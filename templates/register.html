@@ -1,0 +1,79 @@
+{% from '_icons.html' import icon %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create account | SafeGuard IMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 4 5.5v6c0 4.7 3.2 8.8 8 10 4.8-1.2 8-5.3 8-10v-6z' fill='%23142B4A'/%3E%3C/svg%3E">
+</head>
+<body class="login-body">
+<div class="login-split">
+  <section class="login-brand">
+    <svg class="login-lines" viewBox="0 0 600 700" fill="none" stroke="currentColor" aria-hidden="true">
+      <path d="M300 90 120 170v170c0 120 70 220 180 260 110-40 180-140 180-260V170z" stroke-width="1.2"/>
+      <path d="M300 150 170 208v132c0 92 52 170 130 202 78-32 130-110 130-202V208z" stroke-width="1"/>
+      <path d="M300 210 220 246v94c0 62 32 116 80 140 48-24 80-78 80-140v-94z" stroke-width=".9"/>
+    </svg>
+    <div class="login-brand-top"><span class="brand-mark">{{ icon('shield', 22) }}</span>
+      <span class="brand-text"><strong>SafeGuard</strong><small>IMS</small></span></div>
+    <div class="login-brand-mid">
+      <h1>Join the SafeGuard team.</h1>
+      <p>New accounts start with read-only Staff access. An administrator can grant Manager or Admin access afterwards.</p>
+    </div>
+    <div class="login-tagline">Secure. Manage. Protect.</div>
+  </section>
+
+  <section class="login-form-side">
+    <div class="login-card">
+      <h2>Create account</h2>
+      <p class="muted">Register for SafeGuard IMS.</p>
+      {% if error %}<div class="alert alert-error" role="alert">{{ error }}</div>{% endif %}
+      <div class="alert alert-error" id="clientError" role="alert" hidden></div>
+      <form method="post" action="{{ url_for('register') }}" id="registerForm" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="field{% if errors.username %} invalid{% endif %}">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" value="{{ form.get('username', '') }}" autocomplete="username" maxlength="30" autofocus required>
+          {% if errors.username %}<div class="field-error">{{ errors.username }}</div>{% endif %}
+        </div>
+        <div class="field{% if errors.password %} invalid{% endif %}">
+          <label for="password">Password</label>
+          <div class="input-with-btn">
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+            <button type="button" class="icon-btn" data-toggle="password" aria-label="Show password">{{ icon('eye', 18) }}</button>
+          </div>
+          {% if errors.password %}<div class="field-error">{{ errors.password }}</div>{% else %}<div class="hint">At least 8 characters with a letter and a number.</div>{% endif %}
+        </div>
+        <div class="field{% if errors.confirm_password %} invalid{% endif %}">
+          <label for="confirm_password">Confirm password</label>
+          <div class="input-with-btn">
+            <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required>
+            <button type="button" class="icon-btn" data-toggle="confirm_password" aria-label="Show password">{{ icon('eye', 18) }}</button>
+          </div>
+          {% if errors.confirm_password %}<div class="field-error">{{ errors.confirm_password }}</div>{% endif %}
+        </div>
+        <div class="field{% if errors.role %} invalid{% endif %}">
+          <label for="role">Role</label>
+          <select id="role" name="role">
+            <option value="admin" disabled>Admin — created by an administrator only</option>
+            <option value="manager" disabled>Manager — created by an administrator only</option>
+            <option value="staff" selected>Staff — read-only access</option>
+          </select>
+          {% if errors.role %}<div class="field-error">{{ errors.role }}</div>{% else %}<div class="hint">Public sign-up creates Staff accounts only.</div>{% endif %}
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" id="registerBtn">Create Account</button>
+        <a class="btn btn-outline btn-block back-btn" href="{{ url_for('login') }}">Back to Login</a>
+      </form>
+      <p class="secure-note">{{ icon('lock', 14) }} Passwords are stored as secure hashes.</p>
+    </div>
+    <footer class="login-footer">SafeGuard IMS | Insurance Management System</footer>
+  </section>
+</div>
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+</body>
+</html>

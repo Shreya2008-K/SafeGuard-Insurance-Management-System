@@ -1,0 +1,92 @@
+{% from '_icons.html' import icon %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}{{ crumb|default('Dashboard') }}{% endblock %} | SafeGuard IMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 4 5.5v6c0 4.7 3.2 8.8 8 10 4.8-1.2 8-5.3 8-10v-6z' fill='%23142B4A'/%3E%3C/svg%3E">
+</head>
+<body data-role="{{ role or '' }}">
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">{{ icon('shield', 22) }}</span>
+      <span class="brand-text"><strong>SafeGuard</strong><small>IMS</small></span>
+    </div>
+    <nav class="nav" aria-label="Main navigation">
+      {% for key, label, ic, endpoint, visible in [
+        ('dashboard','Dashboard','dashboard','dashboard_page', true), ('customers','Customers','users','customers_page', true),
+        ('agents','Agents','agent','agents_page', true), ('policies','Policies','policy','policies_page', true),
+        ('claims','Claims','claims','claims_page', true), ('reports','Reports','reports','reports_page', can_report),
+        ('users','User Management','user-cog','users_page', is_admin), ('settings','Settings','settings','settings_page', is_admin),
+        ('profile','Profile','user','profile_page', true)] %}
+      {% if visible and current_user %}
+      <a href="{{ url_for(endpoint) }}" class="nav-link{% if active == key %} active{% endif %}"{% if active == key %} aria-current="page"{% endif %}>
+        {{ icon(ic) }}<span>{{ label }}</span>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="support-card">
+        <strong>Need assistance?</strong>
+        <span>Contact the support team</span>
+        <a class="btn btn-teal btn-sm" href="{{ url_for('profile_page') }}#support">Get support</a>
+      </div>
+      {% if current_user %}<form method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="nav-link logout" type="submit">{{ icon('logout') }}<span>Logout</span></button>
+      </form>{% endif %}
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open navigation">{{ icon('menu', 20) }}</button>
+      <div class="breadcrumb"><a href="{{ url_for('dashboard_page') }}">Dashboard</a><span class="sep">&gt;</span><span>{{ crumb }}</span></div>
+      <div class="topbar-right">
+        <div class="search-box">
+          {{ icon('search', 16) }}
+          <input type="search" id="globalSearch" placeholder="Search customers, policies..." autocomplete="off" aria-label="Search customers and policies">
+          <div class="dropdown search-results" id="searchResults" hidden></div>
+        </div>
+        <div class="bell-wrap">
+          <button class="icon-btn bell" id="bellBtn" aria-label="Notifications">{{ icon('bell', 20) }}<span class="bell-count" id="bellCount" hidden>0</span></button>
+          <div class="dropdown notif" id="notifPanel" hidden></div>
+        </div>
+        {% if current_user %}
+        <a class="user-chip" href="{{ url_for('profile_page') }}" title="My profile">
+          <span class="avatar" id="headerAvatar">{{ initials }}</span>
+          <span class="user-meta"><strong id="headerName">{{ display_name }}</strong><small>{{ role_title }}</small></span>
+        </a>
+        {% endif %}
+      </div>
+    </header>
+    <main class="content">{% block content %}{% endblock %}</main>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="modal-backdrop" id="confirmModal" hidden>
+  <div class="modal modal-sm" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-body">
+      <h3 id="confirmTitle">Confirm</h3>
+      <p id="confirmText" class="muted"></p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" id="confirmNo" type="button">Cancel</button>
+      <button class="btn btn-danger" id="confirmYes" type="button">Delete</button>
+    </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% from '_icons.html' import icon %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in | SafeGuard IMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 4 5.5v6c0 4.7 3.2 8.8 8 10 4.8-1.2 8-5.3 8-10v-6z' fill='%23142B4A'/%3E%3C/svg%3E">
+</head>
+<body class="login-body">
+<div class="login-split">
+  <section class="login-brand">
+    <svg class="login-lines" viewBox="0 0 600 700" fill="none" stroke="currentColor" aria-hidden="true">
+      <path d="M300 90 120 170v170c0 120 70 220 180 260 110-40 180-140 180-260V170z" stroke-width="1.2"/>
+      <path d="M300 150 170 208v132c0 92 52 170 130 202 78-32 130-110 130-202V208z" stroke-width="1"/>
+      <path d="M300 210 220 246v94c0 62 32 116 80 140 48-24 80-78 80-140v-94z" stroke-width=".9"/>
+      <path d="M0 520h600M0 580h600M0 640h600" stroke-width=".6"/>
+    </svg>
+    <div class="login-brand-top"><span class="brand-mark">{{ icon('shield', 22) }}</span>
+      <span class="brand-text"><strong>SafeGuard</strong><small>IMS</small></span></div>
+    <div class="login-brand-mid">
+      <h1>Insurance management, made simpler.</h1>
+      <p>Manage customers, insurance policies, and claims through one secure and organized platform.</p>
+    </div>
+    <div class="login-tagline">Secure. Manage. Protect.</div>
+  </section>
+
+  <section class="login-form-side">
+    <div class="login-card">
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in to your SafeGuard IMS account.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}{% for cat, msg in messages %}
+      <div class="alert alert-{{ 'success' if cat == 'success' else 'error' }}" role="status">{{ msg }}</div>{% endfor %}{% endwith %}
+      {% if error %}<div class="alert alert-error" role="alert">{{ error }}</div>{% endif %}
+      <div class="alert alert-error" id="clientError" role="alert" hidden></div>
+      <form method="post" action="{{ url_for('login') }}" id="loginForm" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="next" value="{{ next|default('') }}">
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" value="{{ username|default('') }}" autocomplete="username" autofocus required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-with-btn">
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="button" class="icon-btn" id="togglePw" aria-label="Show password">{{ icon('eye', 18) }}</button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" name="remember" value="1"> Remember me for 7 days</label>
+        <button class="btn btn-primary btn-block" type="submit" id="signInBtn">Sign In</button>
+      </form>
+      <p class="auth-alt">Don't have an account? <a href="{{ url_for('register') }}">Create Account</a></p>
+      <p class="secure-note">{{ icon('lock', 14) }} Your account is protected by secure authentication.</p>
+    </div>
+    <footer class="login-footer">SafeGuard IMS | Insurance Management System</footer>
+  </section>
+</div>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

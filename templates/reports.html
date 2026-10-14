@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head no-print">
+  <div><h1>Reports</h1><p class="muted">Run reports against live database records. Click a column heading to sort.</p></div>
+  <button class="btn btn-outline" id="printBtn" type="button">Print report</button>
+</div>
+<article class="card no-print">
+  <div class="filters-grid">
+    <div class="field"><label for="reportSelect">Report</label>
+      <select id="reportSelect">
+        <optgroup label="Customers and agents"><option value="customers">Customer report</option><option value="agents">Agent report</option><option value="customer-history">Customer policy history</option></optgroup>
+        <optgroup label="Policies"><option value="policies">All policies</option><option value="policies-active">Active policies</option><option value="policies-expired">Expired policies</option><option value="by-type">Policies grouped by type</option></optgroup>
+        <optgroup label="Claims"><option value="claims-pending">Pending claims</option><option value="claims-approved">Approved claims</option><option value="claims-rejected">Rejected claims</option></optgroup>
+        <optgroup label="Financial"><option value="totals">Total premiums and approved claims</option></optgroup>
+      </select></div>
+    <div class="field" data-filter="q"><label for="fq">Search</label><input id="fq" type="search" placeholder="Name or email"></div>
+    <div class="field" data-filter="customer_id"><label for="fcustomer">Customer</label><select id="fcustomer"></select></div>
+    <div class="field" data-filter="policy_type"><label for="ftype">Policy type</label><select id="ftype"><option value="">All types</option><option>Life Insurance</option><option>Health Insurance</option><option>Vehicle Insurance</option><option>Property Insurance</option></select></div>
+    <div class="field" data-filter="status"><label for="fstatus">Status</label><select id="fstatus"><option value="">All statuses</option><option>Active</option><option>Pending</option><option>Expired</option><option>Cancelled</option></select></div>
+    <div class="field" data-filter="policy_id"><label for="fpolicy">Policy ID</label><input id="fpolicy" type="number" min="1"></div>
+    <div class="field" data-filter="min_count"><label for="fmin">Minimum policies</label><input id="fmin" type="number" min="1" placeholder="e.g. 3"></div>
+    <div class="field" data-filter="date_from"><label for="ffrom" id="flabelFrom">From date</label><input id="ffrom" type="date"></div>
+    <div class="field" data-filter="date_to"><label for="fto">To date</label><input id="fto" type="date"></div>
+    <div class="field filter-actions"><button class="btn btn-primary" id="runBtn" type="button">Run report</button></div>
+  </div>
+</article>
+<article class="card report-card">
+  <div class="card-head"><div><h2 id="reportTitle">Report</h2><p class="muted" id="reportMeta"></p></div></div>
+  <div class="summary-strip" id="reportSummary"></div>
+  <div class="table-wrap"><table class="table sortable" id="reportTable"></table></div>
+</article>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/reports.js') }}"></script>{% endblock %}

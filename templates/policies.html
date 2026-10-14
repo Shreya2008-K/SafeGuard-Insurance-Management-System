@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Policies</h1><p class="muted">Create and manage insurance policies.</p></div>
+  <button class="btn btn-primary" id="addBtn" type="button">+ Create New Policy</button>
+</div>
+<div class="summary-strip" id="summary"></div>
+<article class="card">
+  <div class="toolbar">
+    <input type="search" id="q" class="input" placeholder="Search by policy ID or customer" aria-label="Search policies">
+    <select id="typeFilter" class="input" aria-label="Filter by type"><option value="">All types</option><option>Life Insurance</option><option>Health Insurance</option><option>Vehicle Insurance</option><option>Property Insurance</option></select>
+    <select id="statusFilter" class="input" aria-label="Filter by status"><option value="">All statuses</option><option>Active</option><option>Pending</option><option>Expired</option><option>Cancelled</option></select>
+    <span class="chip" id="customerChip" hidden></span>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Policy ID</th><th>Customer</th><th>Agent</th><th>Type</th><th class="num">Premium</th><th class="num">Coverage</th><th>Start</th><th>End</th><th>Status</th><th class="actions">Actions</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="pager" id="pager"></div>
+</article>
+
+<div class="modal-backdrop" id="formModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+    <form id="policyForm" novalidate>
+      <div class="modal-head"><h3 id="formTitle">Create Policy</h3><button type="button" class="icon-btn" data-close aria-label="Close">&times;</button></div>
+      <div class="modal-body form-grid">
+        <input type="hidden" name="policy_id">
+        <div class="field"><label for="customer_id">Customer</label><select id="customer_id" name="customer_id" required></select></div>
+        <div class="field"><label for="agent_id">Agent <span class="opt">(optional)</span></label><select id="agent_id" name="agent_id"></select></div>
+        <div class="field"><label for="policy_type">Policy type</label>
+          <select id="policy_type" name="policy_type" required><option value="">Select…</option><option>Life Insurance</option><option>Health Insurance</option><option>Vehicle Insurance</option><option>Property Insurance</option></select></div>
+        <div class="field"><label for="status">Status</label>
+          <select id="status" name="status"><option value="Auto">Automatic (from dates)</option><option value="Cancelled">Cancelled</option></select></div>
+        <div class="field"><label for="coverage_amount">Coverage amount (₹)</label><input id="coverage_amount" name="coverage_amount" type="number" min="1" step="any" required></div>
+        <div class="field"><label for="premium_amount">Premium amount (₹)</label><input id="premium_amount" name="premium_amount" type="number" min="1" step="any" required></div>
+        <div class="field"><label for="start_date">Start date</label><input id="start_date" name="start_date" type="date" required></div>
+        <div class="field"><label for="end_date">End date</label><input id="end_date" name="end_date" type="date" required></div>
+        <div class="calc span-2">
+          <div><strong>Premium calculator</strong>
+            <p class="muted small">Illustrative only. Annual premium = coverage × a base rate for the policy type × an age factor (Life/Health). This is an educational formula, not a real insurer's underwriting model.</p></div>
+          <div class="calc-row"><button type="button" class="btn btn-outline btn-sm" id="calcBtn">Estimate premium</button><span id="calcResult" class="small"></span></div>
+        </div>
+        <p class="muted small span-2">Status is set automatically: Pending before the start date, Active during the policy period, Expired after the end date. Choose Cancelled to cancel a policy.</p>
+      </div>
+      <div class="modal-foot"><button type="button" class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" type="submit" id="saveBtn">Save policy</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/policies.js') }}"></script>{% endblock %}
